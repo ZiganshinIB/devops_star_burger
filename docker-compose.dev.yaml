@@ -1,0 +1,28 @@
+services:
+  pg_db:
+    image: "postgres:14"
+    environment:
+      POSTGRES_USER: "${PG_USER:-burgeruser}"
+      POSTGRES_PASSWORD: "${PG_PASSWORD:-SecretPasswordhudavhcsdaiudbbvypq}"
+      POSTGRES_DB: "${PG_DB:-burger}"
+      PGDATA: "/var/lib/postgresql/data"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U burgeruser -d burger"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile_dev
+    environment:
+      SECRET_KEY: "${SECRET_KEY:-changeme}"
+      DEBUG: true
+      DATABASE_URL: "postgres://${PG_USER-burgeruser}:${PG_PASSWORD-SecretPasswordhudavhcsdaiudbbvypq}@pg_db:5432/${PG_DB-burger}"
+      YANDEX_API_KEY: "${YANDEX_API_KEY:-changeme}"
+    ports:
+      - 80:8000
+    depends_on:
+      pg_db:
+        condition: service_healthy
+
