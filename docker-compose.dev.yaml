@@ -18,7 +18,7 @@ services:
     environment:
       SECRET_KEY: "${SECRET_KEY:-changeme}"
       DEBUG: true
-      DATABASE_URL: "postgres://${PG_USER-burgeruser}:${PG_PASSWORD-SecretPasswordhudavhcsdaiudbbvypq}@pg_db:5432/${PG_DB-burger}"
+      DATABASE_URL: "postgres://${PG_USER-burgeruser}:${PG_PASSWORD-SecretPasswordhudavhcsdaiudbbvypq}@{PG_HOST-pg_db}:{PG_PORT-5432}/${PG_DB-burger}"
       YANDEX_API_KEY: "${YANDEX_API_KEY:-changeme}"
     ports:
       - 80:8000
