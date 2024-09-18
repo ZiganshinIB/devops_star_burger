@@ -9,8 +9,8 @@
 
 ### Клонируйте проект на свой локальный компьютер 
 ```shell
-git clone ...
-cd docker_star_burger
+git clone https://github.com/ZiganshinIB/devops_star_burger.git
+cd devops_star_burger
 ```
 ### Создайте файл с переменными окружения `.env` в корневой каталог проекта
 ```bash
