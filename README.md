@@ -1,5 +1,5 @@
 # Проект Star Burger 
-Предназначен для сборки проекта в Docker и Kubernetes
+Предназначен для сборки [проекта](https://github.com/ZiganshinIB/star-burger-dvmn) в Docker и Kubernetes
 ## Требовании 
 Программы необходимые для сборки:
 - Docker (желательно Docker version 27.2.1, build 9e34c9b)
@@ -69,6 +69,7 @@ docker run --env-file .env -p 8000:8000 -it star-burger:1.0.2dev
 `elzig1999/star-burger:<version> .prod` - prod версия проекта.
 
 # Kubernetes 
+Для решении задачи сборки проекта в Kubernetes созданы [docker images с dev и prod версиями](https://hub.docker.com/r/elzig1999/star-burger/tags).
 ## Быстрый старт
 Для запуска проекта в Kubernetes. Запустите minikube
 ```shell
