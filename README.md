@@ -1,18 +1,22 @@
-# Проект Star Burger 
-Предназначен для сборки [проекта](https://github.com/ZiganshinIB/star-burger-dvmn) в Docker и Kubernetes
-## Требовании 
-Программы необходимые для сборки:
-- Docker (желательно Docker version 27.2.1, build 9e34c9b)
-- kubectl (желательно версия 1.31.0)
-- minikube (желательно версия 1.34.0)
-## Быстрый старт
-
-### Клонируйте проект на свой локальный компьютер 
+# Project Star Burger 
+This is a repository intended for build  [project](https://github.com/ZiganshinIB/star-burger-dvmn) в Docker и Kubernetes
+## System requirements 
+Software:
+- Docker (preferably Docker version 27.2.1, build 9e34c9b)
+- kubectl (preferably version 1.31.0)
+- minikube (preferably version 1.34.0)
+Hardware :
+- operating system : Linux (preferably Ubuntu 20.04.1 LTS)
+- CPU : 2 cores and more
+- RAM : 8 GB adn more
+- Disk space : 20 GB and more
+## Quick start
+### Clone the project to your local computer
 ```shell
 git clone https://github.com/ZiganshinIB/devops_star_burger.git
 cd devops_star_burger
 ```
-### Создайте файл с переменными окружения `.env` в корневой каталог проекта
+### Create file `.env`  to the project root directory and write variables:
 ```bash
 SECRET_KEY=django-insecure-0if40nf4nf93n4
 YANDEX_API_KEY=610526f4-26ba-44c5-a498-a82f22d28d35
@@ -21,64 +25,53 @@ PG_PASSWORD=secret_password
 PG_DB=db_name
 
 ```
-- `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте.
-- `YANDEX_API_KEY` — Получить токен  YANDEX_API_KEY можно получить по следующей ссылке https://developer.tech.yandex.ru/services/3
-- `PG_USER` — имя пользователя базы данных (Опционально)
-- `PG_PASSWORD` — пароль пользователя базы данных (Опционально)
-- `PG_DB` — название базы данных (Опционально)
-### Запустите проект в dev версии
-
+- `SECRET_KEY` — project secret key. He is responsible for encryption on the site. For example, all passwords on your website are encrypted with it.
+- `YANDEX_API_KEY` — The YANDEX_API_KEY token can be obtained from the following link https://developer.tech.yandex.ru/services/3
+Following variables for database:
+- `PG_USER` — database username (Optional)
+- `PG_PASSWORD` — database user password (Optional)
+- `PG_DB` — database name (Optional)
+### Start dev version project
 ```bash
 docker compose -f docker-compose.dev.yaml up 
 ```
 
-### Запуск проекта в prod версии
-Желательно добавить переменные среды в `.env`
+### Start prod version project
+It is advisable to add environment variables to `.env`
 ```
 ALLOWED_HOSTS=127.0.0.1,localhost
 ROLLBAR_ACCESS_TOKEN=YOUR_ROLLBAR_ACCESS_TOKEN
 ROLLBAR_NAME=YOUR_ROLLBAR_NAME
 ROLLBAR_ENVIRONMENT=YOUR_ROLLBAR_ENVIRONMENT
 ```
-Далее запускаем проект
+Next run project
 ```shell
 docker compose -f docker-compose.prod.yaml up
 ```
 
-## Старт dev версии
-Необходимо определить переменые среды 
-
-```
-YANDEX_API_KEY=YOUR_YANDEX_API_KEY
-SECRET_KEY=YOUR_SECRET_KEY
-PG_USER=root
-PG_PASSWORD=SecretPassword
-PG_DB=db_name
-```
-- `SECRET_KEY` — секретный ключ проекта. Он отвечает за шифрование на сайте. Например, им зашифрованы все пароли на вашем сайте.
-- `YANDEX_API_KEY` — Получить токен  YANDEX_API_KEY можно получить по следующей ссылке https://developer.tech.yandex.ru/services/3
-- `PG_USER` — имя пользователя базы данных (Опционально)
-- `PG_PASSWORD` — пароль пользователя базы данных (Опционально)
-- `PG_DB` — название базы данных (Опционально)
-```bash
-docker run --env-file .env -p 8000:8000 -it star-burger:1.0.2dev
-```
 # Docker
-В докер hub есть версии проекта с dev и prod версиями. 
-Например, `elzig1999/star-burger:<version>dev` - dev версия проекта.
-`elzig1999/star-burger:<version> .prod` - prod версия проекта.
+In docker hub has dev and prod versions of the project.
+Example, `elzig1999/star-burger:<version>dev` - dev version.
+`elzig1999/star-burger:<version> .prod` - prod version.
 
 # Kubernetes 
-Для решении задачи сборки проекта в Kubernetes созданы [docker images с dev и prod версиями](https://hub.docker.com/r/elzig1999/star-burger/tags).
-## Быстрый старт
-Для запуска проекта в Kubernetes. Запустите minikube
+To build a project using Kubernetes, created [docker images](https://hub.docker.com/r/elzig1999/star-burger/tags).
+## Quick start
+### Start minikube
 ```shell
 minikube start --driver docker
 ```
-Запустите проект с помощью контейнера `elzig1999/star-burger:<tag>`
-Пример запуска dev версии
+### Create pod
+Example:
 ```shell
 kubectl run star-burger-pod --image=elzig1999/star-burger:1.0.2dev --env=YANDEX_API_KEY=YOUR_YANDEX_API_KEY \
 --env=SECRET_KEY=YOUR_SECRET_KEY --port=8000 
 ```
-
+For start with database you need add following variables --env=DB_URL=YOUR_DB_URL
+#### Port forwarding
+To read in docs https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#port-forward
+Example:
+```shell
+kubectl port-forward pod/star-burger-pod 8000:8000
+```
+### Create service
