@@ -61,7 +61,7 @@ To build a project using Kubernetes, created [docker images](https://hub.docker.
 ```shell
 minikube start --driver docker
 ```
-### Create pod
+### Create pod manually
 Example:
 ```shell
 kubectl run star-burger-pod --image=elzig1999/star-burger:1.0.2dev --env=YANDEX_API_KEY=YOUR_YANDEX_API_KEY \
@@ -74,4 +74,70 @@ Example:
 ```shell
 kubectl port-forward pod/star-burger-pod 8000:8000
 ```
-### Create service
+#### Create service
+```shell
+kubectl expose pod star-burger-pod --port=80 --target-port=8000 --type=NodePort
+```
+If you run in minikube (https://minikube.sigs.k8s.io/docs/handbook/accessing/):
+```shell
+minikube service star-burger-pod --url
+```
+### Create pod automatically (with YAML file)
+1. Add Secret to the project (https://kubernetes.io/docs/concepts/configuration/secret/).:
+   * Encode secret in base64 and copy result
+   ```shell
+    echo -n 'YOUR_SECRET' | base64 
+    ```
+   * Create Secret (manifest):
+    ```yaml 
+    apiVersion: v1
+    kind: Secret
+    metadata:
+        name: star-burger-secret
+    type: Opaque
+    data:
+        DEBUG: YOUR_SECRET_IN_BASE64 # Option
+        DB_URL: YOUR_SECRET_IN_BASE64 # Option
+        YANDEX_API_KEY: YOUR_SECRET_IN_BASE64
+        SECRET_KEY: YOUR_SECRET_IN_BASE64
+    ```
+2. Start POD and Services (manifest):
+```shell
+kubectl apply -f k8s/k8s-star-burger-dev-pod.yaml
+```
+If you run in minikube (https://minikube.sigs.k8s.io/docs/handbook/accessing/):
+```shell
+minikube service star-burger-pod --url
+```
+3. Delete pod and service (manifest):
+```shell
+kubectl delete -f k8s/k8s-star-burger-dev-pod.yaml
+```
+### Create deployment automatically (with YAML file)
+1. Add Secret to the project (https://kubernetes.io/docs/concepts/configuration/secret/).:
+   * Encode secret in base64 and copy result
+   ```shell
+    echo -n 'YOUR_SECRET' | base64 
+    ```
+   * Create Secret (manifest):
+    ```yaml 
+    apiVersion: v1
+    kind: Secret
+    metadata:
+        name: star-burger-secret
+    type: Opaque
+    data:
+        DEBUG: YOUR_SECRET_IN_BASE64 # Option
+        DB_URL: YOUR_SECRET_IN_BASE64 # Option
+        YANDEX_API_KEY: YOUR_SECRET_IN_BASE64
+        SECRET_KEY: YOUR_SECRET_IN_BASE64
+    ```
+2. Start deployment (manifest):
+```shell
+kubectl apply -f k8s/k8s-star-burger-dev-deploy.yaml
+```
+3. Delete deployment (manifest):
+```shell
+kubectl delete -f k8s/k8s-star-burger-dev-deploy.yaml
+```
+

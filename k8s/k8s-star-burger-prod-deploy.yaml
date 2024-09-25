@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: star-burger-prod-deploy
+    labels:
+        app: star-burger
+        env: prod
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: star-burger
+            env: prod
+    template:
+        metadata:
+            labels:
+                app: star-burger
+                env: prod
+        spec:
+            containers:
+                - name: star-burger-prod
+                  image: elzig1999/star-burger:1.0.2prod
+                  ports:
+                    - containerPort: 8000
+                  envFrom:
+                    - secretRef:
+                        name: star-burger-secret
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: star-burger-prod-nodeport
+spec:
+  selector:
+    app: star-burger
+    env: prod
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
+  type: NodePort

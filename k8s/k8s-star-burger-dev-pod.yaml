@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+    name: star-burger-dev
+    labels:
+        app: star-burger
+        env: dev
+spec:
+    containers:
+      - name: star-burger
+        image: elzig1999/star-burger:1.0.2dev
+        ports:
+          - containerPort: 8000
+        envFrom:
+          - sourceRef:
+              name: star-burger-secret
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: star-burger-dev-nodeport
+spec:
+  selector:
+    app: star-burger
+    env: dev
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: NodePort
